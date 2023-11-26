@@ -9,9 +9,7 @@ from webcreatorApp.models import Imgpath
 from django.conf import settings
 from icrawler.builtin import GoogleImageCrawler  # before using it --must install 1.lxml 2. bs4 3. requests  4. six 6. pillow
 
-# directory = 'dir_name'
-# google_crawler = GoogleImageCrawler( feeder_threads=1,parser_threads=3,downloader_threads=4,storage={'root_dir': directory})
-# google_crawler.crawl(keyword='cat', filters=dict(size='large'), max_num=1, file_idx_offset=0)
+
 
 #_________________________________________________________________________________________________________
 def toList(topdisp,sep=None):
@@ -38,53 +36,52 @@ def colorname(color_name):
         return (0, 0, 0)  # Default to black if color name is not found
     
 
-def arrange(lis,reverse):   # arranges  items in reverse order for 5 4 3 2 1  type of video
-    
-    actual =lis
-    
-    ask = reverse
-    first = actual[0]
-    if ask:
-        actual.pop(0)
-        actual.reverse()
-        actual.insert(0, first)
+def arrange(actual,reverse,titlebar=True):   # arranges  items in reverse order for 5 4 3 2 1  type of video   
 
-    actual = [i for i in actual if i!=""]
+    actual = [i for i in actual if i!=""]  # first make sure no empty list in actual list
+    first = actual[0]  # save the title
+    if reverse:
+        if titlebar:
+            actual.pop(0)  # means if title is given in keywords : then the first item won't be reversed
+            actual.reverse()
+            actual.insert(0, first)
+        else:
+          actual.reverse()
     return actual
     
 #__________________________________________________________________________________________________________________
 
 class videoFunctions:
     
-    def imgdownloader(self,id,top5):
-
+    def imgdownloader(self,id,imgkeywords):
+        print(imgkeywords)
         media=settings.MEDIA_ROOT
         os.chdir(media)
         os.makedirs(f'user_{id}',exist_ok=True)
         os.makedirs(f'user_{id}/images',exist_ok=True)   
-
-        for img_keyword in top5:
+        for img_keyword in imgkeywords:
             os.chdir(os.path.join(media,f'user_{id}','images'))
             print('Starting Download...')
-            directory = img_keyword 
-            google_crawler =GoogleImageCrawler( feeder_threads=1,parser_threads=3,downloader_threads=4,storage={'root_dir': directory})
+            print('keyword to be download',img_keyword)
+            google_crawler =GoogleImageCrawler( feeder_threads=1,parser_threads=3,downloader_threads=4,storage={'root_dir': img_keyword})
             google_crawler.crawl(keyword=img_keyword, filters=dict(size='large'), max_num=1, file_idx_offset=0)
             print('Download Complete...')
             os.chdir(media)
 
     #_______________________________________________________________________________________________________________________
-    def bestChoice(self,id,reverse):
+    def bestChoice(self,id,reverse,titlebar):
 
         media=settings.MEDIA_ROOT
         os.chdir( os.path.join(media,f'user_{id}'))
 
         allimgfolders = os.listdir('images')
         names =Keyword.objects.get(id=id)     # get keyword list from database
-
         names = toList(names.pic_keywords)
-        names = [name.replace(" ", "") for name in names]   #removing spaces to ensure no issues in path creation
-        
-        names= arrange(names,reverse)
+
+        print(names,'before arranging')
+        names= arrange(names,reverse,titlebar)
+        print(names,f'when reverse was {reverse}')
+
         imgpaths = []
         for name in names:
             for img in allimgfolders:
@@ -97,10 +94,6 @@ class videoFunctions:
     #_______________________________________________________________________________________________________________________
 
     def  makeVideo(self,id,fk,duration=2):
-
-        target_height = 900
-        target_width = int(target_height * (9/16))
-        target = (target_width, target_height)
 
         def resize_images(path, target_size, target_format):
             image = Image.open(path)
@@ -123,7 +116,6 @@ class videoFunctions:
             resized_image.save(resized_image_path)
             return resized_image_path
 
-
         def create_video_from_photos(duration_per_photo, output_file, foreign_key):
             
             paths =Imgpath.objects.get(fk=foreign_key)
@@ -136,8 +128,13 @@ class videoFunctions:
             video_clip = concatenate_videoclips(image_clips, method="compose")
             video_clip.write_videofile(output_file, codec='libx264', fps=24)
 
+        
+        # video should be in 9:16
+        target_height = 900
+        target_width = int(target_height * (9/16))
+        target = (target_width, target_height)
 
-        media=settings.MEDIA_ROOT
+
         os.makedirs(f'temp',exist_ok=True)
         os.chdir('temp')
         time.sleep(1)
@@ -154,7 +151,6 @@ class videoFunctions:
 
  #_______________________________________________________________________________________________________________________
 
-
     def titleBar(self,id,bg_color="yellow",text_color="black",fontSize=2,thickness=3):
         #Extract title text
 
@@ -162,7 +158,7 @@ class videoFunctions:
         title = toList(title)[0]
 
         # Load the video
-        video_path = "output.mp4"
+        video_path = "output.mp4" 
         cap = cv2.VideoCapture(video_path)
 
         # Get video properties
@@ -188,7 +184,7 @@ class videoFunctions:
         title_text_max_width = width - 2 * title_offset_sides
 
         # Set the duration for which the title bar will be displayed (in seconds)
-        title_duration = 1.4
+        title_duration = 1.0
 
         # Variables to keep track of elapsed time and title bar visibility
         start_time = cv2.getTickCount() / cv2.getTickFrequency()
@@ -239,17 +235,15 @@ class videoFunctions:
         out.release()
         cv2.destroyAllWindows()
 
-
     #_______________________________________________________________________________________________________________________
 
-    def textOnVideo(self,id,title,reverse,duration):
-
+    def textOnVideo(self,id,titlebar,reverse,duration):
+    
 
         def add_text_with_shadow(frame, text, position, font, font_scale, thickness, shadow_color, shadow_offset):
             # Add shadow text
             shadow_position = (position[0] + shadow_offset[0], position[1] + shadow_offset[1])
             cv2.putText(frame, text, shadow_position, font, font_scale, shadow_color, thickness, cv2.LINE_AA)
-
 
         def add_timestamp(frame,text, **text_properties):
 
@@ -295,7 +289,6 @@ class videoFunctions:
                 cv2.putText(frame, textLine, (x, y), font, font_scale, color, thickness, line_type) # and finally this function draws text on video by taking follwing arguments: 1. frame(screen/full_image)  2. textline(put this func in loop if more than one lines)3. (x,y) coordinates that we calculated above.  and the other text properties like font, thickness etc and finally draws the text
                 y += line_spacing
 
-
         def put_text_on_video(video_path, output_path, text_properties):
 
             # Open the video file
@@ -311,21 +304,35 @@ class videoFunctions:
             # ...and the following code keeps modifying each frame and storing in it
             
             display_text =Keyword.objects.get(id=id).display_keywords
+            print('titlebar was',title)
             display_text = toList(display_text)
-            actual =arrange(display_text,reverse)   # arranges  items in reverse order for 5 4 3 2 1  type of video
-
+            print(display_text,'is the displaytext')
+            actual =arrange(display_text,reverse,titlebar=titlebar)   # arranges  items in reverse order for 5 4 3 2 1  type of video
+            print(actual,'actual',len(actual))
 
 
             timestamps = []
-            time =duration
+            time =0 if not titlebar else duration
 
-            for i in range(1,len(actual)):
-                stamp= {}
-                stamp["text"] = f"{len(actual)-i}. {actual[i]}"
-                stamp["start_time"] = time
-                stamp["end_time"] = stamp["start_time"] +duration
-                time= stamp["end_time"]
-                timestamps.append(stamp)
+            if titlebar:
+                for i in range(1,len(actual)):
+                    stamp= {}
+                    stamp["text"] = f"{len(actual)-i}. {actual[i]}"
+                    stamp["start_time"] = time
+                    stamp["end_time"] = stamp["start_time"] +duration
+                    time= stamp["end_time"]
+                    timestamps.append(stamp)
+            else:
+                for i in range(len(actual)):
+                    stamp= {}
+                    stamp["text"] = f"{len(actual)-i}. {actual[i]}"
+                    stamp["start_time"] = time
+                    stamp["end_time"] = stamp["start_time"] +duration
+                    time= stamp["end_time"]
+                    timestamps.append(stamp)
+
+
+            print(timestamps,'the timestamps are ')
 
 
             # Read and process each frame of the video
@@ -356,13 +363,12 @@ class videoFunctions:
             output_video.release() # releases/or finalizes the output video
             cv2.destroyAllWindows()  # destroy all windows created by opencv
 
-
         # step 1: Specify the input video path,output video path and Define the text properties
         media=settings.MEDIA_ROOT
         user= os.path.join(media,f'user_{id}')
-        if title:
+        if titlebar:
             vf = videoFunctions()
-            vf.titleBar(id=id)
+            vf.titleBar(id=id)  # after calling this function title is added and the  video is saved as 'title_added.mp4'
             input_video_path = "title_added.mp4"
         else:
             input_video_path = "output.mp4"

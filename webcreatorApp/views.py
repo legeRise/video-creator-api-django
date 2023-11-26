@@ -28,9 +28,13 @@ def create(request):
     if imgkeywords ==""  or display == "":
       return HttpResponseBadRequest(json.dumps({'message': 'All Fields Must be Filled'}), content_type='application/json')
     
-    imgkeywords = toList(imgkeywords)
-    display = toList(display)
+
+    imgkeywords = toList(imgkeywords) 
+    # removing spaces in search keywords as these keywords are to be used in path creation and spaces may result in error
+    imgkeywords = [name.replace(" ", "") for name in imgkeywords] 
+    display = toList(display)  # no need to remove spaces from display
     
+
     if len(imgkeywords) != len(display):
       return HttpResponseBadRequest(json.dumps({'message': 'Both Fields Should have Same Number of keywords'}), content_type='application/json')
 
@@ -49,12 +53,13 @@ def create(request):
       c.imgdownloader(key.id,imgkeywords)
 
     # step2:  Pick the Best fitting images for each keyword
-      best_image_paths =c.bestChoice(key.id,reverse)
+      best_image_paths =c.bestChoice(key.id,reverse,titlebar)
       string_paths = toString(best_image_paths,sep="|")
       paths = Imgpath(fk=key,paths=string_paths)
       paths.save()
 
     # step3: start making video  
+      print('i did make it here step333')
       c.makeVideo(id=key.id,fk=key)
 
       c.textOnVideo(key.id,titlebar,reverse,duration=2)
