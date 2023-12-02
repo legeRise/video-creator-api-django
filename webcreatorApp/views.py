@@ -1,4 +1,5 @@
-from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from django.http import JsonResponse,HttpResponseBadRequest,FileResponse
 from .functionality import functionality as func
 from .functionality.functionality import toList,toString
@@ -10,7 +11,7 @@ import json,os
 # Create your views here.
 c = func.videoFunctions()
   
-@csrf_exempt
+
 def create(request):
 
   if request.method=='POST':
