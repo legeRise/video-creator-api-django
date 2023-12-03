@@ -1,94 +1,47 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.http import JsonResponse,HttpResponseBadRequest,FileResponse
+from rest_framework import status
 from .functionality import functionality as func
-from .functionality.functionality import toList,toString
-from .models import Keyword   # can also do from webcreatorApp.models import Keyword  but "." can handle it so no need to mentione the App Name explicitly
 from .models import Imgpath
-from django.conf import settings
-import json,os
+from .serializers import KeywordSerializer
+import os
+
 
 # Create your views here.
 c = func.videoFunctions()
   
-
+@api_view(['POST'])
 def create(request):
 
-  if request.method=='POST':
-    data = json.loads(request.body)
-    print(data," this is all info i received")
+  # step 1: Get Keywords from user
+  keyword_data = KeywordSerializer(data=request.data)  # make sure you mention "data=request.data" and not request.data
+  if keyword_data.is_valid():
+    key =keyword_data.save()
 
-    imgkeywords = data.get('imgkeywords')
-    display = data.get('display')
-    reverse = bool(data.get('reverse'))
-    titlebar =bool(data.get('titlebar'))
-    print(imgkeywords)
-    print(display)
-    print(reverse)
-    print(titlebar)
-    if imgkeywords ==""  or display == "":
-      return HttpResponseBadRequest(json.dumps({'message': 'All Fields Must be Filled'}), content_type='application/json')
+    # step 2: Download Images based on keywords
+    c.downloadImages(key.id,key.pic_keywords)  
     
+    # choose a single image for each keyword and generate it's path
+    best_image_paths =c.bestChoice(key.id,key.reverse,key.titlebar)
+    string_paths = "|".join(best_image_paths)
+    paths = Imgpath(fk=key,paths=string_paths)
+    paths.save()
 
-    imgkeywords = toList(imgkeywords) 
-    # removing spaces in search keywords as these keywords are to be used in path creation and spaces may result in error
-    imgkeywords = [name.replace(" ", "") for name in imgkeywords] 
-    display = toList(display)  # no need to remove spaces from display
+    # step 3: create video
+    c.makeVideo(id=key.id,fk=key)
+
+    # step 4: put titlebar(if required) and keywords on video
+    user_id,title =c.textOnVideo(key.id,key.titlebar,key.reverse,duration=2)
+    video_path = os.path.join('media',user_id,f'{title}.mp4')  # because the other part is just MEDIA_ROOT and that is changed automatically
     
-
-    if len(imgkeywords) != len(display):
-      return HttpResponseBadRequest(json.dumps({'message': 'Both Fields Should have Same Number of keywords'}), content_type='application/json')
-
-    if not 3 <= len(imgkeywords) <=11:
-      return HttpResponseBadRequest(json.dumps({'message': 'No of Keywords Should be between 3 and 10'}), content_type='application/json')
-    try:
-      # save keywords to database
-      key = Keyword()
-      key.pic_keywords = toString(imgkeywords)
-      key.display_keywords= toString(display)
-      key.save() 
-      print('data was saved')
-      
-    #_________________________________ video creation starts______________________________________
-    # Step1:  ImageDownloader
-      c.imgdownloader(key.id,imgkeywords)
-
-    # step2:  Pick the Best fitting images for each keyword
-      best_image_paths =c.bestChoice(key.id,reverse,titlebar)
-      string_paths = toString(best_image_paths,sep="|")
-      paths = Imgpath(fk=key,paths=string_paths)
-      paths.save()
-
-    # step3: start making video  
-      print('i did make it here step333')
-      c.makeVideo(id=key.id,fk=key)
-
-      c.textOnVideo(key.id,titlebar,reverse,duration=2)
-  
-
-      # preparing params 
-
-      user_id= f"user_{key.id}"
-      title = display[0].replace(" ","")
-      print(' I WAS CREATING THE PATH')
-
-
-      video_path = os.path.join('media',user_id,f'{title}.mp4')  # because the other part is just MEDIA_ROOT and that is changed automatically
-      print(f' THE PATH WAS {video_path}')   
-      params = {'user_id':user_id,'title':title,'message':'Video Created!','video_url':video_path}
-      print(params)
-      return JsonResponse(params)
+    context = {'message':'Video Created!','user_id':user_id,'title':title,'video_url':video_path}
+    return Response(context)
+  else:
+    return Response(keyword_data.errors,status=status.HTTP_400_BAD_REQUEST)
 
 
 
- 
-    except Exception as e:
-
-      return HttpResponseBadRequest(json.dumps({'message': 'Video could not be Created!'}), content_type='application/json')
-  
-    
-  return HttpResponseBadRequest(json.dumps({'message': 'Only POST Request is Allowed'}), content_type='application/json')
-    
+   
 
 
 

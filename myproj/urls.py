@@ -21,9 +21,15 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 
+#_________________________________________________Just for Testing - always write views in views.py___________________
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+@api_view(['GET'])
 def check(request):
-    from django.http import JsonResponse
-    return JsonResponse({'message':'It is Working'})
+    return Response({'message':'It is Working'})
+#______________________________________________________________________________________________________________________
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),

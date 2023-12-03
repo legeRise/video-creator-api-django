@@ -9,14 +9,11 @@ from webcreatorApp.models import Imgpath
 from django.conf import settings
 from icrawler.builtin import GoogleImageCrawler  # before using it --must install 1.lxml 2. bs4 3. requests  4. six 6. pillow
 
-
-
 #_________________________________________________________________________________________________________
 def toList(topdisp,sep=None):
     if sep:
         return topdisp.split(sep)
     return topdisp.split(",")
-
 
 
 def toString(topdisp,sep=None):
@@ -53,8 +50,8 @@ def arrange(actual,reverse,titlebar=True):   # arranges  items in reverse order 
 
 class videoFunctions:
     
-    def imgdownloader(self,id,imgkeywords):
-        print(imgkeywords)
+    def downloadImages(self,id,imgkeywords):
+        imgkeywords =toList(imgkeywords)
         media=settings.MEDIA_ROOT
         os.chdir(media)
         os.makedirs(f'user_{id}',exist_ok=True)
@@ -64,7 +61,7 @@ class videoFunctions:
             print('Starting Download...')
             print('keyword to be download',img_keyword)
             google_crawler =GoogleImageCrawler( feeder_threads=1,parser_threads=3,downloader_threads=4,storage={'root_dir': img_keyword})
-            google_crawler.crawl(keyword=img_keyword, filters=dict(size='large'), max_num=1, file_idx_offset=0)
+            google_crawler.crawl(keyword=img_keyword, filters=dict(size='large'), max_num=4, file_idx_offset=0)
             print('Download Complete...')
             os.chdir(media)
 
@@ -147,9 +144,7 @@ class videoFunctions:
             durations=[duration]*total
             create_video_from_photos(durations, 'output.mp4',fk)
         
-
-
- #_______________________________________________________________________________________________________________________
+    #_______________________________________________________________________________________________________________________
 
     def titleBar(self,id,bg_color="yellow",text_color="black",fontSize=2,thickness=3):
         #Extract title text
@@ -239,7 +234,6 @@ class videoFunctions:
 
     def textOnVideo(self,id,titlebar,reverse,duration):
     
-
         def add_text_with_shadow(frame, text, position, font, font_scale, thickness, shadow_color, shadow_offset):
             # Add shadow text
             shadow_position = (position[0] + shadow_offset[0], position[1] + shadow_offset[1])
@@ -304,11 +298,8 @@ class videoFunctions:
             # ...and the following code keeps modifying each frame and storing in it
             
             display_text =Keyword.objects.get(id=id).display_keywords
-            print('titlebar was',title)
-            display_text = toList(display_text)
-            print(display_text,'is the displaytext')
+            display_text = toList(display_text) 
             actual =arrange(display_text,reverse,titlebar=titlebar)   # arranges  items in reverse order for 5 4 3 2 1  type of video
-            print(actual,'actual',len(actual))
 
 
             timestamps = []
@@ -330,9 +321,6 @@ class videoFunctions:
                     stamp["end_time"] = stamp["start_time"] +duration
                     time= stamp["end_time"]
                     timestamps.append(stamp)
-
-
-            print(timestamps,'the timestamps are ')
 
 
             # Read and process each frame of the video
@@ -373,11 +361,11 @@ class videoFunctions:
         else:
             input_video_path = "output.mp4"
 
+
         # output videopath
         title = Keyword.objects.get(id=id).display_keywords
         titleName = toList(title)[0].replace(" ","")
-
-        output_video_path = os.path.join(user, f'{titleName.strip()}.mp4')
+        output_video_path = os.path.join(user, f'{titleName}.mp4')
 
 
         # text properties
@@ -394,3 +382,5 @@ class videoFunctions:
 
         # step 2: Call the function which takes input video path, output video path and text properties as input
         put_text_on_video(input_video_path, output_video_path, text_properties)
+
+        return f"user_{id}",titleName
