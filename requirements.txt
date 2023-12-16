@@ -28,4 +28,4 @@ tqdm==4.66.1
 tzdata==2023.3
 urllib3==2.1.0
 webcolors==1.13
-gunicorn
+gunicorn==21.2.0
