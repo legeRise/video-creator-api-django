@@ -4,7 +4,7 @@ if [ ! -d "$venvname" ]; then
     python -m venv "$venvname"
     pip install -r requirements.txt
 fi
-
+pip freeze
 source "$venvname/bin/activate"
 python manage.py makemigrations
 python manage.py migrate
