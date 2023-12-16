@@ -8,4 +8,4 @@ fi
 source "$venvname/bin/activate"
 python manage.py makemigrations
 python manage.py migrate
-python manage.py runserver 0.0.0.0:9200
+gunicorn -w 4 -b 0.0.0.0:9200 --reload myproj.wsgi:application
