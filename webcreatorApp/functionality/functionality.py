@@ -354,6 +354,7 @@ class videoFunctions:
         # step 1: Specify the input video path,output video path and Define the text properties
         media=settings.MEDIA_ROOT
         user= os.path.join(media,f'user_{id}')
+        print('titlebar: 42342',titlebar,media)
         if titlebar:
             vf = videoFunctions()
             vf.titleBar(id=id)  # after calling this function title is added and the  video is saved as 'title_added.mp4'
@@ -384,3 +385,4 @@ class videoFunctions:
         put_text_on_video(input_video_path, output_video_path, text_properties)
 
         return f"user_{id}",titleName
+        
