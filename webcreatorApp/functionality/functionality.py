@@ -83,7 +83,7 @@ class videoFunctions:
         for name in names:
             for img in allimgfolders:
                 if name == img:
-                    new_path = os.path.join(media,f'user_{id}',f'images\\{img}')
+                    new_path = os.path.join(media,f'user_{id}','images',img)
                     all_new = os.listdir(new_path)
                     random_pic = os.path.join(new_path, random.choice(all_new))
                     imgpaths.append(random_pic)
