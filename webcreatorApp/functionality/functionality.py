@@ -151,6 +151,7 @@ class videoFunctions:
 
         title = Keyword.objects.get(id=id).display_keywords
         title = toList(title)[0]
+        print('title154: ',title)
 
         # Load the video
         video_path = "output.mp4" 
