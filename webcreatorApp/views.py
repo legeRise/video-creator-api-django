@@ -27,15 +27,13 @@ def create(request):
     paths = Imgpath(fk=key,paths=string_paths)
     paths.save()
 
-    # step 3: create video
-    c.makeVideo(id=key.id,fk=key)
-
-    # step 4: put titlebar(if required) and keywords on video
-    user_id,title =c.textOnVideo(key.id,key.titlebar,key.reverse,duration=2)
-    video_path = os.path.join('media',user_id,f'{title}.mp4')  # because the other part is just MEDIA_ROOT and that is changed automatically
+    #step 3: create video
+    user_id,title= c.makeVideo(id=key.id,fk=key,reverse=key.reverse,titlebar=key.titlebar)
     
+    video_path = os.path.join('media',user_id,'temp',f'{title}.mp4')  # because the other part is just MEDIA_ROOT and that is changed automatically
     context = {'message':'Video Created!','user_id':user_id,'title':title,'video_url':video_path}
     return Response(context)
+ 
   else:
     return Response(keyword_data.errors,status=status.HTTP_400_BAD_REQUEST)
 
