@@ -1,7 +1,6 @@
 import os
 import time
 import random
-import cv2
 from PIL import Image,ImageDraw,ImageFont
 from moviepy.editor import ImageClip, concatenate_videoclips
 from webcreatorApp.models import Keyword
