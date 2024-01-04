@@ -10,11 +10,12 @@ COPY requirements.txt .
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Copy the rest of the application files
+COPY . .
+
 # Run collectstatic to gather static files
 RUN python manage.py collectstatic --noinput
 
-# Copy the rest of the application files
-COPY . .
 
 # Expose the port the app runs on
 EXPOSE 80
