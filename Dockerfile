@@ -25,4 +25,4 @@ RUN python manage.py migrate
 EXPOSE 80
 
 # Command to run the application
-CMD ["python", "manage.py", "runserver", "0.0.0.0:80"]
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:80", "myproj.wsgi:application"]
