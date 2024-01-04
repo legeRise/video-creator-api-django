@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .functionality import functionality as func
+from functionality import functionality as func
 from .models import Imgpath
 from .serializers import KeywordSerializer
 import os
