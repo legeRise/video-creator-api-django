@@ -9,7 +9,7 @@ from django.conf import settings
 from icrawler.builtin import GoogleImageCrawler  # before using it --must install 1.lxml 2. bs4 3. requests  4. six 6. pillow
 
 #_________________________________________________________________________________________________________
-# some helper functions
+# some helper functions are here
 def toList(topdisp,sep=None):
     if sep:
         return topdisp.split(sep)
