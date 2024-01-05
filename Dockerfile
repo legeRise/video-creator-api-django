@@ -25,5 +25,6 @@ RUN python manage.py migrate
 EXPOSE 80
 
 # Command to run the application         adding timeout was necessary cause sometimes the request main take too long 
-CMD ["gunicorn","-w","4","--timeout", "92", "-b", "0.0.0.0:80", "myproj.wsgi:application"]
+#CMD ["gunicorn","-w","4","--timeout", "92", "-b", "0.0.0.0:80", "myproj.wsgi:application"]
+CMD ["python", "manage.py","runserver","0.0.0.0:80"]
 
