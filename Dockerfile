@@ -4,7 +4,7 @@ FROM python:3.8-slim
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy only the necessary files for dependency installation
+# Copy only the necessary files for dependency installation --youuuuooo
 COPY requirements.txt .
 
 # Install dependencies
