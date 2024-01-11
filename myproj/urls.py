@@ -39,7 +39,7 @@ urlpatterns = [
 ]
 
 
-if settings.DEBUG:    # SAME AS  settings.DEBUG=True  ---means if 'DEBUG' attribute in settings.py is 'True'  
-    urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# if settings.DEBUG:    # SAME AS  settings.DEBUG=True  ---means if 'DEBUG' attribute in settings.py is 'True'  
+#     urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
