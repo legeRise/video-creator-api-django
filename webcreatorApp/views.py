@@ -5,6 +5,8 @@ from functionality import functionality as func
 from .models import Imgpath
 from .serializers import KeywordSerializer
 import os
+import boto3
+from django.conf import settings
 
 
 # Create your views here.
@@ -29,9 +31,20 @@ def create(request):
 
     #step 3: create video
     user_id,title= c.makeVideo(id=key.id,fk=key,reverse=key.reverse,titlebar=key.titlebar)
+    local_video_path = os.path.join(settings.MEDIA_ROOT,user_id,'temp',f'{title}.mp4')  # because the other part is just MEDIA_ROOT and that is changed automatically
     
-    video_path = os.path.join('media',user_id,'temp',f'{title}.mp4')  # because the other part is just MEDIA_ROOT and that is changed automatically
-    context = {'message':'Video Created!','user_id':user_id,'title':title,'video_url':video_path}
+
+    # making connection to s3 bucket (AWS)
+    s3 = boto3.client('s3', aws_access_key_id=settings.AWS_ACCESS_KEY_ID, aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY, region_name=settings.AWS_S3_REGION_NAME)
+    
+    # destination path of generated video
+    destination = f'videos/{user_id}-{title}.mp4'
+    
+    s3.upload_file(local_video_path, settings.AWS_STORAGE_BUCKET_NAME, destination)
+    temporary_link =s3.generate_presigned_url('get_object',Params={'Bucket': settings.AWS_STORAGE_BUCKET_NAME,'Key': destination},ExpiresIn=60*60*3)   # 3 hours
+
+
+    context = {'message':'Video Created!','title':f"{title}.mp4","download_link":temporary_link,"Link_Validity":"3 Hours"}
     return Response(context)
  
   else:
