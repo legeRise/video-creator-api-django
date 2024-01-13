@@ -21,7 +21,7 @@ class Imgpath(models.Model):
     paths = models.TextField(default="")  # Field to store concatenated image paths
 
     def __str__(self):
-        return self.fk.display_keywords.split(",")[0]
+        return self.fk.display_keywords.split(",")[0] # displays the title
 
 
 
