@@ -6,8 +6,8 @@ from moviepy.editor import ImageClip, concatenate_videoclips
 from webcreatorApp.models import Keyword
 from webcreatorApp.models import Imgpath
 from django.conf import settings
-from icrawler.builtin import GoogleImageCrawler  # before using it --must install 1.lxml 2. bs4 3. requests  4. six 6. pillow
-
+#from icrawler.builtin import GoogleImageCrawler  # before using it --must install 1.lxml 2. bs4 3. requests  4. six 6. pillow
+from icrawler.builtin import BingImageCrawler
 #_________________________________________________________________________________________________________
 # some helper functions are here
 def toList(topdisp,sep=None):
@@ -60,8 +60,14 @@ class videoFunctions:
             os.chdir(os.path.join(media,f'user_{id}','images'))
             print('Starting Download...')
             print('keyword to be download',img_keyword)
-            google_crawler =GoogleImageCrawler( feeder_threads=1,parser_threads=3,downloader_threads=4,storage={'root_dir': img_keyword})
-            google_crawler.crawl(keyword=img_keyword, filters=dict(size='large'), max_num=4, file_idx_offset=0)
+            
+            # google_crawler =GoogleImageCrawler( feeder_threads=1,parser_threads=3,downloader_threads=4,storage={'root_dir': img_keyword})
+            # google_crawler.crawl(keyword=img_keyword, filters=dict(size='large'), max_num=4, file_idx_offset=0)
+
+            # temporarily replaced google_crawler with bing_crawler bcz it seems there are some issues in icrawler library w.r.t to google_crawler (sometimes it works,sometimes it doesn't)
+            
+            bing_crawler =BingImageCrawler( feeder_threads=1,parser_threads=3,downloader_threads=4,storage={'root_dir': img_keyword})
+            bing_crawler.crawl(keyword=img_keyword, filters=dict(size='large'), max_num=4, file_idx_offset=0)
             print('Download Complete...')
             os.chdir(media)
         
