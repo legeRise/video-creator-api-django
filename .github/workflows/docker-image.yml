@@ -20,7 +20,7 @@ jobs:
         run: docker build -t ${{ env.IMAGENAME }} .
 
       - name: Tag the image
-        run: docker tag ${{ env.IMAGENAME }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPO }}
+        run: docker tag ${{ env.IMAGENAME }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPO }}:latest
 
       - name: logging in to dockerhub
         run: docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin <<<${{ secrets.DOCKERHUB_PASSWORD }}
