@@ -1,0 +1,27 @@
+name: Building docker Image
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      IMAGENAME: "myimage"
+      DOCKER_USER: "habib926653"
+      DOCKER_REPO: "videoapidjango"
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build the Docker image
+        run: docker build -t ${{ env.IMAGENAME }} .
+
+      - name: Tag the image
+        run: docker tag ${{ env.IMAGENAME }} ${{ env.DOCKER_USER }}/${{ env.DOCKER_REPO }}
+
+      - name: Push to DockerHub
+        run: docker push ${{ env.DOCKER_USER }}/${{ env.DOCKER_REPO }}
