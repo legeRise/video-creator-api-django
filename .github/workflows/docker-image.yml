@@ -22,7 +22,7 @@ jobs:
       - name: Tag the image
         run: docker tag ${{ env.IMAGENAME }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_REPO }}:latest
 
-      - name: logging in to dockerhub
+      - name: Log in to DockerHub
         run: docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin <<<${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Push to DockerHub
