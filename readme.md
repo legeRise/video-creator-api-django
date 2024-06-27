@@ -22,11 +22,11 @@ Here's a sample video created by the application:
 
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/user/yt-short-maker-api.git
+    git clone https://github.com/legeRise/video-creator-api-django
     ```
 2. **Navigate to the project directory:**
     ```bash
-    cd yt-short-maker-api
+    cd video-creator-api-django
     ```
 3. **Install the required dependencies:**
     ```bash
@@ -43,7 +43,7 @@ Here's a sample video created by the application:
 
 ### Using the API:
 
-1. **API Endpoint**: The API endpoint for creating videos is `http://127.0.0.1:8000/api/create-video/`.
+1. **API Endpoint**: The API endpoint for creating videos is `http://127.0.0.1:8000/videoapi/createvideo/`.
 2. **Request Format**:
     - Send a POST request with JSON payload containing `pic_keywords` and `display_keywords`.
 
@@ -57,13 +57,3 @@ Here's a sample video created by the application:
    - **Note**: Each "display keyword" is the overlay text for the corresponding "pic keyword." For example, if the pic keyword is `programminglanguageicons`, the display keyword might be `Top 5 Programming Languages`, meaning the image for `programminglanguageicons` will have the overlay text "Top 5 Programming Languages."
 
 4. **Response**: The response will contain the URL to download the generated video.
-
-### Example Request:
-
-```bash
-curl -X POST http://127.0.0.1:8000/api/create-video/ \
--H "Content-Type: application/json" \
--d '{
-    "pic_keywords": "programminglanguageicons,python,javascript,c,java",
-    "display_keywords": "Top 5 Programming Languages,Python,JavaScript,C,Java"
-}'
