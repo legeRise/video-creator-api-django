@@ -8,6 +8,8 @@ from webcreatorApp.models import Imgpath
 from django.conf import settings
 #from icrawler.builtin import GoogleImageCrawler  # before using it --must install 1.lxml 2. bs4 3. requests  4. six 6. pillow
 from icrawler.builtin import BingImageCrawler
+from django.conf import settings
+import google.generativeai as genai
 #_________________________________________________________________________________________________________
 # some helper functions are here
 def toList(topdisp,sep=None):
@@ -49,6 +51,14 @@ def arrange(actual,reverse,titlebar=True):   # arranges  items in reverse order 
 #__________________________________________________________________________________________________________________
 
 class videoFunctions:
+
+    def title_to_keywords(self,title):
+        genai.configure(api_key=settings.GEMINI_API)
+        model = genai.GenerativeModel(settings.GEMINI_MODEL)
+        PROMPT = settings.PROMPT + title
+        print("the prompt is: \n",PROMPT)
+        response = model.generate_content(PROMPT)
+        return response.text
     
     def downloadImages(self,id,imgkeywords):
         imgkeywords =toList(imgkeywords)
@@ -177,3 +187,6 @@ class videoFunctions:
             if video_created:
                 return f"user_{id}",VIDEO_TITLE
         
+
+
+
