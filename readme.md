@@ -13,7 +13,7 @@ YouTube Short Maker is a web application built with Django and Django REST Frame
 
 Here's a sample video created by the application:
 
-[![Sample Video](https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg)](https://github.com/user/repository/raw/master/done/Top%205%20Programming%20Languages.mp4)
+[video sample](https://github.com/legerise/ytshortmaker/raw/master/done/Top%205%20Programming%20Languages.mp4)
 
 ## Usage
 
