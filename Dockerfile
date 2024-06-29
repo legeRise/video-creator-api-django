@@ -1,4 +1,4 @@
-FROM python:3.8.6-slim AS builder
+FROM python:3.11.9-slim AS builder
 
 WORKDIR /djangoApp
 COPY requirements.txt .
@@ -9,7 +9,7 @@ ENV PATH='/djangoApp/env92/bin:$PATH'
 RUN python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic
 
 
-FROM python:3.8.6-slim
+FROM python:3.11.9-slim
 
 WORKDIR /djangoApp
 COPY --from=builder /djangoApp/ /djangoApp/
