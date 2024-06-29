@@ -1,4 +1,5 @@
 import os
+import shutil
 import time
 import random
 from PIL import Image,ImageDraw,ImageFont
@@ -13,6 +14,21 @@ import google.generativeai as genai
 from .function_wrap_center import add_text_to_image
 #_________________________________________________________________________________________________________
 # some helper functions are here
+
+import shutil
+import os
+
+def remove_directory(dir_path):
+    """
+    Remove the specified directory and all its contents.
+    """
+    if os.path.isdir(dir_path):
+        shutil.rmtree(dir_path)
+        print(f"{dir_path} and its contents have been removed.")
+    else:
+        print(f"{dir_path} does not exist or is not a directory.")
+
+
 
 def custom_title(text):
     return ' '.join([word[0].upper() + word[1:] if word else '' for word in text.split(' ')])
@@ -122,37 +138,7 @@ class videoFunctions:
                     add_text_to_image(image_path, text, is_title=False, save_to=image_path)
                 
                 count=count+1
-        # def add_text_with_shadow(text_list,path_list, font_path=os.path.join(settings.FONT_BASE_DIR,'RussoOne-Regular.ttf'), font_size=45, text_position=(180, 420), text_color=(255, 255, 0), shadow_color=(0, 0, 0), shadow_offset=(4,4)):
-
-
-                # Define fonts
-            # fonts = {
-            #     "bold": os.path.join(settings.FONT_BASE_DIR,'Roboto-Bold.ttf'),
-            #     "medium": os.path.join(settings.FONT_BASE_DIR,'Roboto-Medium.ttf'),
-            #     "light": os.path.join(settings.FONT_BASE_DIR,'Roboto-Light.ttf'),
-            #     "thin": os.path.join(settings.FONT_BASE_DIR,'Roboto-Thin.ttf')
-            # }
-
-            # print('all fonts',fonts.values())
-
-            # count=0
-            # for text,image_path in zip(text_list,path_list):
-            #     image = Image.open(image_path)
-            #     draw = ImageDraw.Draw(image)
-            #     font = ImageFont.truetype(fonts['bold'], 35) if titlebar else ImageFont.truetype(fonts['medium'], 40),
-            #     print(font,'selectedd font \n\n\n')
-            #     shadow_position = (text_position[0] + shadow_offset[0], text_position[1] + shadow_offset[1])
-            #     if titlebar and count==0:
-            #         # draw titlebar
-            #         # draw.rectangle((10, 310, 490, 400),fill='yellow')
-            #         # draw.text((180, 330), text, font=font, fill='black')
-            #         print("i was used  i am titlebar  count 0")
-            #     else:
-            #         # draw.text(shadow_position, text, font=font, fill=shadow_color)
-            #         # draw.text(text_position, text, font=font, fill=text_color)
-            #         print("i was used  i am not titlebar  count >0")
-            #     # image.save(image_path)
-            #     count=count+1
+    
 
         def resize_images(paths, target_size, target_format):
             resized_image_paths = []
@@ -188,6 +174,7 @@ class videoFunctions:
             #creates ImageClip obj of all paths --- it converts images to short clips like img1 with duration=2 will be displayed for 2sec in the video
             image_clips = [ImageClip(path, duration=duration) for path, duration in zip(resized_paths, duration_per_photo)]
             video_clip = concatenate_videoclips(image_clips, method="compose")
+            os.chdir("..")
             video_clip.write_videofile(output_file, codec='libx264', fps=30)
             return True
 
@@ -215,6 +202,12 @@ class videoFunctions:
             durations=[duration]*total
             video_created = create_video_from_photos(display_text,durations,f'{VIDEO_TITLE}.mp4',fk)
             if video_created:
+                print("Video was Created!")
+                print("Removing Temporary Folders in 3 secs...")
+                time.sleep(3)
+                remove_directory(os.path.join(os.getcwd(),'images'))  # remove images folder
+                remove_directory(os.path.join(os.getcwd(),'temp'))  # remove temp folder
+                print("Temporary Folders Removed!")
                 return f"user_{id}",VIDEO_TITLE
         
 
