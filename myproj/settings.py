@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^p3a+@2pedfabh-5i&7bu+j7-mh%v&&i@+1x-ww!0kltd7%@&#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False  # when false run collectstatic command (using whitenoise or whatever)
 
 ALLOWED_HOSTS = ["*"]
 
@@ -46,7 +46,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # 'whitenoise.middleware.WhiteNoiseMiddleware',      # this was added
+    'whitenoise.middleware.WhiteNoiseMiddleware',      # this was added
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -129,7 +129,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # the video creation process takes place in media dir locally so it has to be here even in production
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-#  IF RUNNING LOCALLY, Uncomment this
+
 MEDIA_URL = 'media/'
 
 

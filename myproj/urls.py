@@ -16,24 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from django.conf import settings
-from django.conf.urls.static import static
-from django.conf import settings
-
-
-#_________________________________________________Just for Testing - always write views in views.py___________________
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-
-@api_view(['GET'])
-def check(request):
-    return Response({'message':'It is Working'})
-#______________________________________________________________________________________________________________________
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("",check),
     path('videoapi/',include('webcreatorApp.urls'))
 
 ]
