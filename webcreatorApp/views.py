@@ -5,7 +5,6 @@ from functionality import functionality as func
 from .models import Imgpath
 from .serializers import KeywordSerializer
 import os
-import boto3
 from django.conf import settings
 
 
@@ -17,12 +16,17 @@ def create(request):
     
   # step 1: Get Video title from user
   title =request.data.get("title")
+  title = func.custom_title(title)
+
   keywords =  c.title_to_keywords(title)
   pic_keywords,display_keywords = keywords.split("\n")
   pic_keywords  = pic_keywords.split(":")[1]
   display_keywords  = display_keywords.split(":")[1]
 
 
+
+  pic_keywords  = title +','+ pic_keywords
+  display_keywords  = title +','+ display_keywords
   print(pic_keywords)
   print(display_keywords)
 
