@@ -11,7 +11,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
 import os  # had to use
+load_dotenv()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^p3a+@2pedfabh-5i&7bu+j7-mh%v&&i@+1x-ww!0kltd7%@&#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -44,7 +46,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',      # this was added
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',      # this was added
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -128,19 +130,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 #  IF RUNNING LOCALLY, Uncomment this
-# MEDIA_URL = 'media/'
-
-
-# Have an AWS S3 bucket?  use this 
-AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")         
-AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")   
-AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME') 
-AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME')  
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com' 
-
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/' 
-
+MEDIA_URL = 'media/'
 
 
 FONT_BASE_DIR = os.path.join(BASE_DIR,'functionality','fonts')
@@ -150,3 +140,27 @@ FONT_BASE_DIR = os.path.join(BASE_DIR,'functionality','fonts')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# ai model
+
+GEMINI_MODEL = 'gemini-pro'
+GEMINI_API = os.getenv("GEMINI_API")
+
+PROMPT = f"""I am going to provide you a title and you have to find the corresponding items against it and make 
+        two lists of them  one for the actual 'imagesearch' and the other for the 
+        'overlay text'
+        So for example if i give you   title :  top 5 oceans in the world 
+        you will reply with and remember only this response nothing else
+        
+        Image_Keywords: Pacific Ocean, Atlantic Ocean, Indian Ocean, Southern Ocean, Arctic Ocean
+        Display_Keywords: Pacific Ocean, Atlantic Ocean, Indian Ocean, Southern Ocean, Arctic Ocean
+
+        REMEMBER SAME AS THIS NO EXTRA CHARACTER, NOTHING!
+        
+        where in the 'Image_Keywords  you have to add extra tags that will ensure that on searching the keyword
+        the imageo of that item(say pacific ocean) will pop up and so on, while in the display keyword  you have
+        to write short an proper titles  that would look nice as an overlay so for image of 'pacific ocean'  overlay
+        text of  'Pacific Ocean'  capitalized looks beautiful
+        
+        follow the same instructions for  this Title : """
