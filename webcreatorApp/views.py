@@ -14,10 +14,10 @@ c = func.videoFunctions()
 @api_view(['POST'])
 def create(request):
     
-  # step 1: Get Video title from user
+  # step 1: Get Video title from user and generate keywords based on the title
   title =request.data.get("title")
   title = func.custom_title(title)
-
+  print(os.getcwd(),'line 20')
   keywords =  c.title_to_keywords(title)
   pic_keywords,display_keywords = keywords.split("\n")
   pic_keywords  = pic_keywords.split(":")[1]
@@ -31,34 +31,35 @@ def create(request):
   print(display_keywords)
 
   data = { "pic_keywords" : pic_keywords, "display_keywords" : display_keywords, "reverse" : True, "titlebar" : True}
-
-  # step 1: Get Keywords from user
-  print(request.data,'is the reqdata')
   keyword_data = KeywordSerializer(data=data)  
   if keyword_data.is_valid():
     key =keyword_data.save()
 
-    # step 2: Download Images based on keywordsZ
+    # step 2: Download Images based on the generated keywords
     c.downloadImages(key.id,key.pic_keywords)  
     
-    # choose a single image for each keyword and generate it's path
+    # step 3: from downloaded images choose a single image for each keyword and generate it's path
     best_image_paths =c.bestChoice(key.id,key.reverse,key.titlebar)
     string_paths = "|".join(best_image_paths)
     paths = Imgpath(fk=key,paths=string_paths)
     paths.save()
 
     #step 3: create video
-    user_id,title= c.makeVideo(id=key.id,fk=key,reverse=key.reverse,titlebar=key.titlebar)
-    local_video_path = os.path.join(settings.MEDIA_ROOT,user_id,'temp',f'{title}.mp4')  # because the other part is just MEDIA_ROOT and that is changed automatically
+    video_id,title= c.makeVideo(id=key.id,fk=key,reverse=key.reverse,titlebar=key.titlebar)
+    video_dir = os.path.join(settings.BASE_DIR,settings.MEDIA_ROOT,video_id)
+    local_video_path = os.path.join(video_dir,f'{title}.mp4')  # because the other part is just MEDIA_ROOT and that is changed automatically
+    
+    # upload to gooogle drive for sharing
+    generated_video_link = c.upload_to_drive(title,local_video_path,settings.SERVICE_ACCOUNT_FILE,settings.DRIVE_PARENT_FOLDER_ID)
+    print(os.getcwd(),'line 54------\n\\n\n\n')
+
+    # returning to main 'media' folder
+    os.chdir("..")
+    # remove the temp video folder from media dir as video is uploaded to drive
+    func.remove_directory(video_dir)
     
     
-    # destination path of generated video
-    destination = f'videos/{user_id}-{title}.mp4'
-    print(local_video_path)
-    print(destination)
-
-
-    context = {'message':'Video Created!','title':f"{title}.mp4"}
+    context = {'message':'Video Created!',"link": generated_video_link}
     return Response(context)
  
   else:
