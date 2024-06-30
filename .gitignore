@@ -1,4 +1,5 @@
 .env
+service_account_file.json
 venv/
 
 # Byte-compiled / optimized / DLL files

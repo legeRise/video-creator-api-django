@@ -157,10 +157,22 @@ PROMPT = f"""I am going to provide you a title and you have to find the correspo
         Display_Keywords: Pacific Ocean, Atlantic Ocean, Indian Ocean, Southern Ocean, Arctic Ocean
 
         REMEMBER SAME AS THIS NO EXTRA CHARACTER, NOTHING!
+
+        ALSO, THE NUMBER OF KEYWORDS SHOULD MEET THE NUMBER REQUESTED IN TITLE  for example if he said 'Top 7' then
+        seven keywords(image and display both) and so on!
         
         where in the 'Image_Keywords  you have to add extra tags that will ensure that on searching the keyword
-        the imageo of that item(say pacific ocean) will pop up and so on, while in the display keyword  you have
+        the images of that item(say pacific ocean) will pop up and so on, while in the display keyword  you have
         to write short an proper titles  that would look nice as an overlay so for image of 'pacific ocean'  overlay
         text of  'Pacific Ocean'  capitalized looks beautiful
         
         follow the same instructions for  this Title : """
+
+
+
+#google drive upload configurations
+
+DRIVE_PARENT_FOLDER_ID = os.getenv("DRIVE_PARENT_FOLDER_ID")
+
+# by default( in local environment) it will pick the file from BASE_DIR, while in case of docker container '-e' tag can be used
+SERVICE_ACCOUNT_FILE =  os.getenv('SERVICE_ACCOUNT_FILE', default=os.path.join(BASE_DIR,'service_account_file.json')) 

@@ -2,21 +2,27 @@ import os
 import shutil
 import time
 import random
-from PIL import Image,ImageDraw,ImageFont
+from PIL import Image
 from moviepy.editor import ImageClip, concatenate_videoclips
 from webcreatorApp.models import Keyword
 from webcreatorApp.models import Imgpath
+from .function_wrap_center import add_text_to_image
 from django.conf import settings
 #from icrawler.builtin import GoogleImageCrawler  # before using it --must install 1.lxml 2. bs4 3. requests  4. six 6. pillow
 from icrawler.builtin import BingImageCrawler
 from django.conf import settings
+
+# for interacting with gemini
 import google.generativeai as genai
-from .function_wrap_center import add_text_to_image
+
+#for uploading file to google drive
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
+
+
 #_________________________________________________________________________________________________________
 # some helper functions are here
-
-import shutil
-import os
 
 def remove_directory(dir_path):
     """
@@ -27,7 +33,6 @@ def remove_directory(dir_path):
         print(f"{dir_path} and its contents have been removed.")
     else:
         print(f"{dir_path} does not exist or is not a directory.")
-
 
 
 def custom_title(text):
@@ -86,10 +91,10 @@ class videoFunctions:
         imgkeywords =toList(imgkeywords)
         media=settings.MEDIA_ROOT
         os.chdir(media)
-        os.makedirs(f'user_{id}',exist_ok=True)
-        os.makedirs(f'user_{id}/images',exist_ok=True)   
+        os.makedirs(f'video_{id}',exist_ok=True)
+        os.makedirs(f'video_{id}/images',exist_ok=True)   
         for img_keyword in imgkeywords:
-            os.chdir(os.path.join(media,f'user_{id}','images'))
+            os.chdir(os.path.join(media,f'video_{id}','images'))
             print('Starting Download...')
             print('keyword to be download',img_keyword)
             
@@ -107,7 +112,7 @@ class videoFunctions:
     def bestChoice(self,id,reverse,titlebar):
                                  
         media=settings.MEDIA_ROOT
-        os.chdir( os.path.join(media,f'user_{id}'))
+        os.chdir( os.path.join(media,f'video_{id}'))
 
         allimgfolders = os.listdir('images')
         names =Keyword.objects.get(id=id)     # get keyword list from database
@@ -120,7 +125,7 @@ class videoFunctions:
         for name in names:
             for img in allimgfolders:
                 if name == img:
-                    new_path = os.path.join(media,f'user_{id}','images',img)
+                    new_path = os.path.join(media,f'video_{id}','images',img)
                     all_new = os.listdir(new_path)
                     random_pic = os.path.join(new_path, random.choice(all_new))
                     imgpaths.append(random_pic)
@@ -208,8 +213,39 @@ class videoFunctions:
                 remove_directory(os.path.join(os.getcwd(),'images'))  # remove images folder
                 remove_directory(os.path.join(os.getcwd(),'temp'))  # remove temp folder
                 print("Temporary Folders Removed!")
-                return f"user_{id}",VIDEO_TITLE
-        
+                return f"video_{id}",VIDEO_TITLE
+
+    def upload_to_drive(self,title,file_path,service_account_file,parent_folder_id):
+
+        # Authenticate and create a Google Drive API service instance
+        creds = service_account.Credentials.from_service_account_file(
+            service_account_file,
+            scopes=['https://www.googleapis.com/auth/drive']
+        )
+        drive_service = build('drive', 'v3', credentials=creds)
+
+        # File metadata with the fixed parent folder ID
+        file_metadata = {
+            'name': title,
+            'mimeType': 'video/mp4',  # Adjust according to your file type
+            'parents': [parent_folder_id]
+        }
+
+        # Media file upload
+        media = MediaFileUpload(file_path, mimetype='video/mp4')
+
+        # Upload file
+        file = drive_service.files().create(
+            body=file_metadata,
+            media_body=media,
+            fields='id, webViewLink'  # Request webViewLink field for the file
+        ).execute()
+
+        # Get the webViewLink (full link) of the uploaded file
+        file_link = file.get('webViewLink')
+
+        # Return the full link to the uploaded file
+        return file_link
 
 
 
