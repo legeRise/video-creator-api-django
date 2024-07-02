@@ -44,17 +44,20 @@ print(response.json())  # Replace with your handling of response if needed
 }
 ```
 
-So, how it does that and What it is capable of?
-
 ### How it does that?
 
-It is a pretty simple project, what it actually does is 
+It is a pretty simple project, what it actually does is:
 
-1. Takes a video title from User.   **Note: it assumes the titles to be in "top 5" or 3 etclike format i.e "Top 5 MOuntains", "Top 5 Marvel Superheroes" etc anything for which it can extract keywords
-2. Using Gemini Api generates keywords based on that 'title'
-3. Downloads Images against those keywords
-4. Creates a video from it along with the text overlay
-5. Once created, it uploads the video to google drive and returns the link to that video
+1. Takes a video title from User. **Note: it assumes the titles to be in "top 5" or 3 etc like format i.e "Top 5 Mountains", "Top 5 Marvel Superheroes" etc anything for which it can extract keywords.
+   
+2. Using Gemini API generates keywords based on that 'title'.
+
+3. Downloads Images against those keywords.
+
+4. Creates a video from it along with the text overlay.
+
+5. Once created, it uploads the video to Google Drive and returns the link to that video.
+
 
 
 ### What it's capable of?
