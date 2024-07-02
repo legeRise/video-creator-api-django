@@ -80,7 +80,7 @@ If a video doesn't turn out as expected, trying again with the same title might 
 
 ## Setting Up Locally
 
-1. **Clone the repository and navigate into it**
+1. ### Clone the repository and navigate into it
    ```sh
    git clone https://github.com/legeRise/video-creator-api-django.git
    ```
