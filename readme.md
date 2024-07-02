@@ -48,9 +48,9 @@ print(response.json())  # Replace with your handling of response if needed
 
 It is a pretty simple project, what it actually does is:
 
-1. Takes a video title from User. **Note: it assumes the titles to be in "top 5" or 3 etc like format i.e "Top 5 Mountains", "Top 5 Marvel Superheroes" etc anything for which it can extract keywords.
+1. Takes a video title from User. **Note:** it assumes the titles to be in "top 5" or 3 etc like format i.e ***Top 5 Mountains***, ***Top 5 Marvel Superheroes*** etc anything for which it can extract keywords.
    
-2. Using Gemini API generates keywords based on that 'title'.
+2. Using Gemini API generates keywords based on that ***title***.
 
 3. Downloads Images against those keywords.
 
