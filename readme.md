@@ -124,33 +124,44 @@ If a video doesn't turn out as expected, trying again with the same title might 
      
 Replace `your_gemini_api_key`, `your_google_drive_folder_id`, and `path\to\your_service_account_file.json` with your actual Gemini API key, Google Drive folder ID, and service account file path. If you don't set the path to the `service_account_file`, remove `SERVICE_ACCOUNT_FILE` from `.env`. Place your `service_account_file.json` in the folder where `manage.py` exists; it will be automatically detected because the default path is set to the project's `BASE_DIR` directory. You can view this in action in settings.py
      
-     ```
+     ```sh
      SERVICE_ACCOUNT_FILE = os.getenv('SERVICE_ACCOUNT_FILE', default=os.path.join(BASE_DIR, 'service_account_file.json'))
      ```
      
 
+6. ### Run Migrations and Collect Static Files
 
+   Once you have set up everything, run the following commands to apply migrations and collect static files:
 
+   ```sh
+   python manage.py makemigrations
+   python manage.py migrate
+   python manage.py collectstatic
+  ```
 
+7. ### Finally, Run the Project
 
-6 Once you have all this setup run migrations
-python manage.py makemigrations
-python manage.py migrate
-
-7. Run the project
+   ```sh
    python manage.py runserver
+   ```
 
-the project will start running on localhost:8000 (127.0.0.1:8000)  
-go to '/videoapi/createvideo/' endpoint and   make a post rquest using DRF interface you see 
-{"title": "Top 5 Mountains in the World"}  and hit the post button
 
-you will see the response after sometime meanwhile you can see the process when it connects to gemini gets keywords, download images and eventually generates video with a link to it.
-And cheers you have the project in your hands now 
+The project will start running on `localhost:8000` (127.0.0.1:8000). 
 
-REMINDER: the project it live anyway so if you don't want to get in the hassle of setting it up and just want to see the results just use one of the ways(python or curl) to get quick results.
+Go to `/videoapi/createvideo/` endpoint and make a POST request using DRF interface with the following JSON payload:
 
-here is a link to sample video if don't even want this 
-https://drive.google.com/file/d/17q4ndOBx98M-pTpe9O0o-faneRxA9hkx/view?usp=drive_link
+```json
+{"title": "Top 5 Mountains in the World"}
+```
+
+You will see the response after some time. Meanwhile, you can observe the process as it connects to Gemini, retrieves keywords, downloads images, and eventually generates a video with a link to it.
+
+Cheers! Now you have the project in your hands.
+
+**REMINDER:** The project is live, so if you prefer not to set it up and just want to see the results, use either Python or Curl to get quick results.
+
+Here's a link to a sample video: [Sample Video](https://drive.google.com/file/d/17q4ndOBx98M-pTpe9O0o-faneRxA9hkx/view?usp=drive_link)
+
 
 
 
