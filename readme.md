@@ -62,19 +62,20 @@ It is a pretty simple project, what it actually does is:
 
 ### What it's capable of?
 
-Well, it is was more like a hobby project for specific usecase which I later decided to use for practicing django, djangorestframework, docker and containerization, automation and deployment(aws and render) and it did really helped.
+This project started as a hobby to tackle a specific use case, but it quickly became a valuable learning experience for practicing Django, Django REST Framework, Docker, containerization, automation, and deployment (AWS and Render).
 
-So, it is designed to only generate specific kind of videos like
+It is designed to generate specific kinds of videos such as:
 1. Top 5 Mountains in the World
-2. Top 3 Horror places in china
+2. Top 3 Horror places in China
 3. Top 7 wonders of the world
-and so on, actually in the backend it uses gemini to find the facts(like names to five mountains) and later uses another image-downloader library to download images against those keywords,
-so to answer that "What it's capable of"
-it can generate these videos but may not always provide you the desired results
-as there is a chance of weird response from gemini and as well as chance of unaccurate images.
+   and so on. In the backend, it uses Gemini to extract facts (like names of five mountains) and an image-downloader library to fetch images based on these keywords.
 
-If you get any video result that wasn't what it had to be try recreating the video with the same title  that might produce the 
-desired results, that's the only way until i come up with a more robust approach to make sure images and keywords are accurate
+So, to ***What it's capable of*** now that you know what actually takes place behind the scenes, well, it can create such videos(the specific kind), but results may not always meet
+expectations as Gemini's responses can sometimes be unexpected, and the downloaded images may not accurately represent the keywords everytime( because, afterall it is just searching, just like
+on google).
+
+If a video doesn't turn out as expected, trying again with the same title might produce the desired outcome. Until I come up with a better approach to overcome this.
+
 
 
 now if you want to set this project up locally here is what you have to do 
