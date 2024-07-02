@@ -13,17 +13,17 @@ You make a POST request at this endpoint `/videoapi/createvideo/` with the video
 Since, it is already hosted, you can try this sample request right about now,
 
 
-**Example Using Curl and Python**
+# Example Using Curl
 
 ```sh
-# Using Curl
+
 curl -X POST \
   -H "Content-Type: application/json" \
   -d '{"title": "Top 5 Mountains in the World"}' \
   http://videoapidjango.onrender.com/ytshortmakerapi/createvideo/
 ```
 
-# Using Python
+# Example Using Python
 ```python
 import requests
 
