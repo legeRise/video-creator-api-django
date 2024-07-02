@@ -107,15 +107,24 @@ If a video doesn't turn out as expected, trying again with the same title might 
      ```
 
 
-4. ###Install dependencies
+4. ### Install dependencies
    ```sh
    pip install -r requirements.txt
    ```
 
-6. create .env using the .env.sample.txt sample i provided
-   mention your gemini api key
-   your google drive folder id where you want it to upload the filees
-   and your service_account_file.json  which is the json file you get when you create a service account on google cloud console
+5. ### Set Up Environment Variables
+
+   - **Create a `.env` file using the provided `.env.sample.txt`:**
+
+     ```
+     GEMINI_API_KEY=your_gemini_api_key
+     GOOGLE_DRIVE_FOLDER_ID=your_google_drive_folder_id
+     SERVICE_ACCOUNT_FILE=your_service_account_file.json
+     ```
+
+     Replace `your_gemini_api_key`, `your_google_drive_folder_id`, and `your_service_account_file.json` with your actual API key, Google Drive folder ID, and service account file path obtained from Google Cloud Console.
+
+
 
 
 6 Once you have all this setup run migrations
