@@ -68,11 +68,10 @@ It is designed to generate specific kinds of videos such as:
 1. Top 5 Mountains in the World
 2. Top 3 Horror places in China
 3. Top 7 wonders of the world
-   and so on. In the backend, it uses Gemini to extract facts (like names of five mountains) and an image-downloader library to fetch images based on these keywords.
 
-So, to ***What it's capable of*** now that you know what actually takes place behind the scenes, well, it can create such videos(the specific kind), but results may not always meet
-expectations as Gemini's responses can sometimes be unexpected, and the downloaded images may not accurately represent the keywords everytime( because, afterall it is just searching, just like
-on google).
+and so on. In the backend, it uses Gemini to extract facts (like names of five mountains) and an image-downloader library to fetch images based on these keywords.
+
+So, to answer ***What it's capable of*** now that you know what actually takes place behind the scenes: well, it can create such videos (the specific kind). However, results may not always meet expectations as Gemini's responses can sometimes be unexpected, and the downloaded images may not accurately represent the keywords every time (because, after all, it is just searching, just like on Google).
 
 If a video doesn't turn out as expected, trying again with the same title might produce the desired outcome. Until I come up with a better approach to overcome this.
 
