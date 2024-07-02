@@ -35,11 +35,14 @@ print(response.json())  # Replace with your handling of response if needed
 ```
 
 
-Response will look like this 
+**Response Example**
+
+```json
 {
     "message": "Video Created!",
     "link": "https://drive.google.com/file/d/17q4ndOBx98M-pTpe9O0o-faneRxA9hkx/view?usp=drivesdk"
 }
+```
 
 So, how it does that and What it is capable of?
 
