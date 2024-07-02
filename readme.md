@@ -119,10 +119,16 @@ If a video doesn't turn out as expected, trying again with the same title might 
      ```
      GEMINI_API_KEY=your_gemini_api_key
      GOOGLE_DRIVE_FOLDER_ID=your_google_drive_folder_id
-     SERVICE_ACCOUNT_FILE=your_service_account_file.json
+     SERVICE_ACCOUNT_FILE=path\to\your_service_account_file.json 
      ```
+     
+Replace `your_gemini_api_key`, `your_google_drive_folder_id`, and `path\to\your_service_account_file.json` with your actual Gemini API key, Google Drive folder ID, and service account file path. If you don't set the path to the `service_account_file`, remove `SERVICE_ACCOUNT_FILE` from `.env`. Place your `service_account_file.json` in the folder where `manage.py` exists; it will be automatically detected because the default path is set to the project's `BASE_DIR` directory. You can view this in action in settings.py
+     
+     ```
+     SERVICE_ACCOUNT_FILE = os.getenv('SERVICE_ACCOUNT_FILE', default=os.path.join(BASE_DIR, 'service_account_file.json'))
+     ```
+     
 
-     Replace `your_gemini_api_key`, `your_google_drive_folder_id`, and `your_service_account_file.json` with your actual API key, Google Drive folder ID, and service account file path obtained from Google Cloud Console.
 
 
 
