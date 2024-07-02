@@ -137,7 +137,7 @@ Replace `your_gemini_api_key`, `your_google_drive_folder_id`, and `path\to\your_
    python manage.py makemigrations
    python manage.py migrate
    python manage.py collectstatic
-  ```
+   ```
 
 7. ### Finally, Run the Project
 
@@ -158,9 +158,9 @@ You will see the response after some time. Meanwhile, you can observe the proces
 
 Cheers! Now you have the project in your hands.
 
-**REMINDER:** The project is live, so if you prefer not to set it up and just want to see the results, use either Python or Curl to get quick results.
+**REMINDER:** The project is live, so if you prefer not to set it up and just want to make a request as soon as possible, use either Python or Curl request above to get quick results.
 
-Here's a link to a sample video: [Sample Video](https://drive.google.com/file/d/17q4ndOBx98M-pTpe9O0o-faneRxA9hkx/view?usp=drive_link)
+Here's a link to a sample video: [Sample Video](https://drive.google.com/file/d/17q4ndOBx98M-pTpe9O0o-faneRxA9hkx/view?usp=drive_link) if you just wanna see the results.
 
 
 
