@@ -2,18 +2,16 @@
 
 Ytshortmaker-api is a web Api built with Django and Django REST Framework (DRF) that allows users to create youtube shorts with just a video title.
 
-This project is actually the web version of my previous ytshortmaker-tkinter-app but with much improvements. Also, it is hosted on render.com(the free plan, ofcourse)
-so you can check it out too( but again, no frontend it is just an api, for now)
+This project is actually the web version of my previous ytshortmaker-tkinter-app but with much improvements. Also, it is hosted on render.com(the free plan, ofcourse) so you can check it out too( but again, no frontend it is just an api, for now)
 
-live url: https://videoapidjango.onrender.com/
-
+**Live URL:** [https://videoapidjango.onrender.com/](https://videoapidjango.onrender.com/)
 
 So here is what it does
 
-You make a POST request at this endpoint `/videoapi/createvideo/` with the video title and wait for it; It will return 
-a google drive video-link to generated video along with a msg of "Video created".
+You make a POST request at this endpoint `/videoapi/createvideo/` with the video title and wait for it; It will return a google drive video-link to generated video along with a msg of "Video created".
 
 Since, it is already hosted, you can try this sample request right about now,
+
 
 **Example Using Curl**
 curl -X POST \
