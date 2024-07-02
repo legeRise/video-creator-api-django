@@ -21,8 +21,10 @@ curl -X POST \
   -H "Content-Type: application/json" \
   -d '{"title": "Top 5 Mountains in the World"}' \
   http://videoapidjango.onrender.com/ytshortmakerapi/createvideo/
+```
 
 # Using Python
+```python
 import requests
 
 url = 'http://videoapidjango.onrender.com/ytshortmakerapi/createvideo/'
@@ -30,7 +32,7 @@ payload = {'title': 'Top 5 Mountains in the World'}
 response = requests.post(url, json=payload)
 
 print(response.json())  # Replace with your handling of response if needed
-
+```
 
 
 Response will look like this 
