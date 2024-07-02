@@ -107,10 +107,12 @@ If a video doesn't turn out as expected, trying again with the same title might 
      ```
 
 
-4. install dependencies
+4. ###Install dependencies
+   ```sh
    pip install -r requirements.txt
+   ```
 
-5. create .env using the .env.sample.txt sample i provided
+6. create .env using the .env.sample.txt sample i provided
    mention your gemini api key
    your google drive folder id where you want it to upload the filees
    and your service_account_file.json  which is the json file you get when you create a service account on google cloud console
