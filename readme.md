@@ -13,7 +13,7 @@ You make a POST request at this endpoint `/videoapi/createvideo/` with the video
 Since, it is already hosted, you can try this sample request right about now,
 
 
-# Example Using Curl
+## Example Using Curl
 
 ```sh
 
@@ -23,7 +23,7 @@ curl -X POST \
   http://videoapidjango.onrender.com/ytshortmakerapi/createvideo/
 ```
 
-# Example Using Python
+## Example Using Python
 ```python
 import requests
 
@@ -77,11 +77,16 @@ If a video doesn't turn out as expected, trying again with the same title might 
 
 
 
-now if you want to set this project up locally here is what you have to do 
 
-1. Clone this repo and cd into it
+## Setting Up Locally
+
+1. **Clone the repository and navigate into it:**
+   ```sh
    git clone https://github.com/legeRise/video-creator-api-django.git
+   ```
+   ```sh
    cd video-creator-api-django
+   ```
 
 2. create a virtual environment
 
