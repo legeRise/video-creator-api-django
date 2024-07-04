@@ -82,10 +82,10 @@ If a video doesn't turn out as expected, trying again with the same title might 
 
 1. ### Clone the repository and navigate into it
    ```sh
-   git clone https://github.com/legeRise/video-creator-api-django.git
+   git clone https://github.com/legeRise/ytshortmaker-backend.git
    ```
    ```sh
-   cd video-creator-api-django
+   cd ytshortmaker-backend
    ```
 
 2. ### Creating a Virtual Environment
