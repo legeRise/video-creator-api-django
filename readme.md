@@ -1,4 +1,4 @@
-# ___________________________________________________________________________ytshortmaker-api
+#ytshortmaker-api
 
 Ytshortmaker-api is a web Api built with Django and Django REST Framework (DRF) that allows users to create youtube shorts with just a video title.
 
