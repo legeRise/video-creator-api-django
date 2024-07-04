@@ -10,7 +10,7 @@ jobs:
 
     env:
       IMAGENAME: "myimage"
-      DOCKERHUB_REPO: "videoapidjango"
+      DOCKERHUB_REPO: "ytshortmaker-backend"
     
     steps:
       - name: Checkout code
