@@ -89,15 +89,17 @@ def add_text_to_image(image_path, text, is_title=True, save_to=None):
 
     # setting up font_paths
     font_paths = {
-        "black": os.path.join(settings.FONT_BASE_DIR,'Roboto-Black.ttf'),
-        "bold": os.path.join(settings.FONT_BASE_DIR,'Roboto-Bold.ttf'),
-        "medium": os.path.join(settings.FONT_BASE_DIR,'Roboto-Medium.ttf'),
-        "light": os.path.join(settings.FONT_BASE_DIR,'Roboto-Light.ttf'),
-        "thin": os.path.join(settings.FONT_BASE_DIR,'Roboto-Thin.ttf')
+        "weaselic" : os.path.join(settings.FONT_BASE_DIR,'Weaselic.ttf'),
+        "black": os.path.join(settings.FONT_BASE_DIR,'Roboto/Roboto-Black.ttf'),
+        "bold": os.path.join(settings.FONT_BASE_DIR,'Roboto/Roboto-Bold.ttf'),
+        "medium": os.path.join(settings.FONT_BASE_DIR,'Roboto/Roboto-Medium.ttf'),
+        "light": os.path.join(settings.FONT_BASE_DIR,'Roboto/Roboto-Light.ttf'),
+        "thin": os.path.join(settings.FONT_BASE_DIR,'Roboto/Roboto-Thin.ttf')
     }
 
     # Define fonts
     fonts = {
+        "weaselic" : ImageFont.truetype(font_paths['weaselic'], 40),
         "black": ImageFont.truetype(font_paths['black'], 40),
         "bold": ImageFont.truetype(font_paths['bold'], 35),
         "medium": ImageFont.truetype(font_paths['medium'], 40),
@@ -137,7 +139,7 @@ def add_text_to_image(image_path, text, is_title=True, save_to=None):
             draw_text_centered(draw, lines, (safe_margin, rect_y0 + padding), font, rect_x1 - rect_x0, padding, fill='black')
 
     else:
-        font = fonts["black"]
+        font = fonts["weaselic"]
         max_width = image_width - 2 * safe_margin
         max_height = (image_height - 2 * safe_margin) // 2
 
