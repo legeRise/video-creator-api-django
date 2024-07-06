@@ -10,7 +10,7 @@ jobs:
 
     env:
       IMAGENAME: "myimage"
-      DOCKERHUB_REPO: "ytshortmaker-backend"
+      DOCKERHUB_REPO: "ytshortmaker-backend-test"
 
     steps:
       - name: Checkout code
