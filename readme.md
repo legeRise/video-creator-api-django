@@ -165,6 +165,8 @@ Cheers! Now you have the project in your hands.
 
 Here's a link to a sample video: [Sample Video](https://drive.google.com/file/d/17q4ndOBx98M-pTpe9O0o-faneRxA9hkx/view?usp=drive_link) if you just wanna see the results.
 
+**UPDATE:** I have also connected this api to a frotend, you can also check it out on https://ytshortmaker-frontend.onrender.com
+
 
 
 
