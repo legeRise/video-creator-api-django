@@ -99,7 +99,7 @@ def add_text_to_image(image_path, text, is_title=True, save_to=None):
 
     # Define fonts
     fonts = {
-        "weaselic" : ImageFont.truetype(font_paths['weaselic'], 48),
+        "weaselic" : ImageFont.truetype(font_paths['weaselic'], 43),
         "black": ImageFont.truetype(font_paths['black'], 40),
         "bold": ImageFont.truetype(font_paths['bold'], 35),
         "medium": ImageFont.truetype(font_paths['medium'], 40),
