@@ -2,7 +2,7 @@ name: Building docker Image
 
 on:
   push:
-    branches: ["master"]
+    branches: ["trying-to-add-cors"]
 
 jobs:
   build:
@@ -10,7 +10,7 @@ jobs:
 
     env:
       IMAGENAME: "myimage"
-      DOCKERHUB_REPO: "ytshortmaker-backend"
+      DOCKERHUB_REPO: "ytshortmaker-backend-test"
 
     steps:
       - name: Checkout code
