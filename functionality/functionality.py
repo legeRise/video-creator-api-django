@@ -120,6 +120,8 @@ class videoFunctions:
         print(names,'before arranging')
         names= arrange(names,reverse,titlebar)
         print(names,f'when reverse was {reverse}')
+        print("123--names",names)
+        print("124---all img folders",allimgfolders)
 
         imgpaths = []
         for name in names:
