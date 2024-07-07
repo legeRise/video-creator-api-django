@@ -174,6 +174,10 @@ PROMPT = f"""I am going to provide you a title and you have to find the correspo
         the images of that item(say pacific ocean) will pop up and so on, while in the display keyword  you have
         to write short an proper titles  that would look nice as an overlay so for image of 'pacific ocean'  overlay
         text of  'Pacific Ocean'  capitalized looks beautiful
+
+        ALSO REMEMBER, IF YOUR RESPONSE WAS EXACT TO THE POINT AND THEN I REQUEST THE SAME TITLE AGAIN AND AGAIN 
+        YOU HAVE TO RESPOND WITH SAME RESPOPNSE(PROVIDED IT WAS EXACT ON SPOT) DON'T JUST CHANGE YOUR RESPONSE JUST 
+        BECAUSE IT WAS REQUESTED AGAIN AND AGAIN
         
         follow the same instructions for  this Title : """
 
