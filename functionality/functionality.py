@@ -89,11 +89,13 @@ class videoFunctions:
     
     def downloadImages(self,id,imgkeywords):
         imgkeywords =toList(imgkeywords)
+        print(imgkeywords,'92 downloadImages ---imgkeywords')
         media=settings.MEDIA_ROOT
         os.chdir(media)
         os.makedirs(f'video_{id}',exist_ok=True)
         os.makedirs(f'video_{id}/images',exist_ok=True)   
         for img_keyword in imgkeywords:
+            print(img_keyword,'for this img_keyword')
             os.chdir(os.path.join(media,f'video_{id}','images'))
             print('Starting Download...')
             print('keyword to be download',img_keyword)
