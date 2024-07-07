@@ -34,7 +34,7 @@ def create(request):
   keyword_data = KeywordSerializer(data=data)  
   if keyword_data.is_valid():
     key =keyword_data.save()
-
+    print(key.pic_keywords,'are the keywords before downloading images')
     # step 2: Download Images based on the generated keywords
     c.downloadImages(key.id,key.pic_keywords)  
     
