@@ -34,12 +34,16 @@ def create(request):
   keyword_data = KeywordSerializer(data=data)  
   if keyword_data.is_valid():
     key =keyword_data.save()
-    print(key.pic_keywords,'are the keywords before downloading images')
+    test_keywords =  key.pic_keywords
+    print(test_keywords,'are the keywords before downloading images')
+    print(len(test_keywords.split(",")),"total keywordds count")
+    
     # step 2: Download Images based on the generated keywords
     c.downloadImages(key.id,key.pic_keywords)  
     
     # step 3: from downloaded images choose a single image for each keyword and generate it's path
     best_image_paths =c.bestChoice(key.id,key.reverse,key.titlebar)
+    print(len(best_image_paths),best_image_paths,"best image paths count")
     string_paths = "|".join(best_image_paths)
     paths = Imgpath(fk=key,paths=string_paths)
     paths.save()
