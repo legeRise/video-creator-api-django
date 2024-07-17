@@ -227,7 +227,7 @@ class videoFunctions:
 
         # File metadata with the fixed parent folder ID
         file_metadata = {
-            'name': title,
+            'name': f"{title}.mp4",
             'mimeType': 'video/mp4',  # Adjust according to your file type
             'parents': [parent_folder_id]
         }
