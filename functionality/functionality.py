@@ -202,7 +202,6 @@ class videoFunctions:
             photo_paths = paths.paths  
             photo_paths= toList(photo_paths,sep="|")
             resized_paths  =  resize_images(photo_paths,target_size=(360, 740),target_format='PNG')
-            generate_and_add_audio(display_text)
             audio_clips = generate_and_add_audio(display_text)
             overlay_text(display_text,resized_paths)
 
