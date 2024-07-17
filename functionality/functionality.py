@@ -3,7 +3,7 @@ import shutil
 import time
 import random
 from PIL import Image
-from moviepy.editor import ImageClip, concatenate_videoclips
+from moviepy.editor import ImageClip, concatenate_videoclips,AudioFileClip
 from webcreatorApp.models import Keyword
 from webcreatorApp.models import Imgpath
 from .function_wrap_center import add_text_to_image
@@ -11,6 +11,7 @@ from django.conf import settings
 from icrawler.builtin import GoogleImageCrawler  # before using it --must install 1.lxml 2. bs4 3. requests  4. six 6. pillow
 #from icrawler.builtin import BingImageCrawler
 from django.conf import settings
+import pyttsx3 # generates audio
 
 # for interacting with gemini
 import google.generativeai as genai
@@ -133,11 +134,37 @@ class videoFunctions:
         return imgpaths
     #_______________________________________________________________________________________________________________________
 
-    def  makeVideo(self,id,fk,duration=2,titlebar=False,reverse=False):
+    def  makeVideo(self,id,fk,titlebar=False,reverse=False):
 
-        def overlay_text(text_list,path_list):
+
+        def generate_and_add_audio(display_text):
+            
+            engine = pyttsx3.init()
+
+            # setting female voice
+            voices = engine.getProperty('voices')   
+            engine.setProperty('voice', voices[1].id)  # 0 for male, 1 for female
+
+            # setting speech speed
+            engine.setProperty('rate',150)
+
+            audio_file_paths = []
+            for index,text in enumerate(display_text):
+                print(text,'152 saving audio')
+                destination = os.path.join("audio_clips",f"{index}.mp3")
+                engine.save_to_file(text,destination)
+                audio_file_paths.append(destination)
+            engine.runAndWait()  
+
+            audio_clips = [AudioFileClip(file_path) for file_path in audio_file_paths]
+            return audio_clips
+            
+
+
+
+        def overlay_text(display_text,path_list):
             count=0
-            for text,image_path in zip(text_list,path_list):
+            for text,image_path in zip(display_text,path_list):
                 if titlebar and count==0:
                     add_text_to_image(image_path, text, is_title=True, save_to=image_path)
                 else:
@@ -169,33 +196,31 @@ class videoFunctions:
                 resized_image_paths.append(resized_image_path)
             return resized_image_paths
 
-        def create_video_from_photos(display_text,duration_per_photo, output_file, foreign_key):
+        def create_video_from_photos(display_text,PER_IMAGE_DURATON, output_file, foreign_key):
             
             paths =Imgpath.objects.get(fk=foreign_key)
             photo_paths = paths.paths  
             photo_paths= toList(photo_paths,sep="|")
             resized_paths  =  resize_images(photo_paths,target_size=(360, 740),target_format='PNG')
+            audio_clips = generate_and_add_audio(display_text)
             overlay_text(display_text,resized_paths)
 
             #creates ImageClip obj of all paths --- it converts images to short clips like img1 with duration=2 will be displayed for 2sec in the video
-            image_clips = [ImageClip(path, duration=duration) for path, duration in zip(resized_paths, duration_per_photo)]
-            video_clip = concatenate_videoclips(image_clips, method="compose")
+            image_clips = [ImageClip(path).set_duration(PER_IMAGE_DURATION) for path in resized_paths]
+            image_clips_with_audio = [image.set_audio(audio) for image,audio in zip(image_clips,audio_clips)]
+
+            video_clip = concatenate_videoclips(image_clips_with_audio, method="compose")
             os.chdir("..")
-            video_clip.write_videofile(output_file, codec='libx264', fps=30)
+            video_clip.write_videofile(output_file, codec='libx264', fps=24)
             return True
 
-        
-        # video should be in 9:16
-        # the function first comes here -------
-        target_height = 900
-        target_width = int(target_height * (9/16))
-        target = (target_width, target_height)
+
 
         os.makedirs(f'temp',exist_ok=True)
         os.chdir('temp')
         time.sleep(1)
         os.makedirs('resized',exist_ok=True)
-
+        os.makedirs('audio_clips',exist_ok=True)
 
         # count total keywords ---so that duration could be set for all of them ---like 2 sec for 6 keywords= [2,2,2,2,2,2]        
         total =Keyword.objects.get(id=id).pic_keywords
@@ -203,10 +228,10 @@ class videoFunctions:
         display_text = toList(display_text)
         VIDEO_TITLE = display_text[0]
         display_text= arrange(display_text,reverse,titlebar)
+        PER_IMAGE_DURATION = 2  # 2 SECONDS
         total= len(toList(total))
         if total>=3 and total<=10:
-            durations=[duration]*total
-            video_created = create_video_from_photos(display_text,durations,f'{VIDEO_TITLE}.mp4',fk)
+            video_created = create_video_from_photos(display_text,PER_IMAGE_DURATION,f'{VIDEO_TITLE}.mp4',fk)
             if video_created:
                 print("Video was Created!")
                 print("Removing Temporary Folders in 3 secs...")
