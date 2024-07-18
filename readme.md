@@ -4,7 +4,7 @@ Ytshortmaker-api is a web Api built with Django and Django REST Framework (DRF) 
 
 This project is actually the web version of my previous ytshortmaker-tkinter-app but with much improvements. Also, it is hosted on render.com(the free plan, ofcourse) so you can check it out too( but again, no frontend it is just an api, for now)
 
-**UPDATE:** I have also connected this api to a frotend, you can also check it out the complete webapp.
+**UPDATE:** I have also connected this api to a frontend, you can also check it out the complete webapp.
 
 **Live WEBAPP URL:** [https://ytshortmaker-frontend.onrender.com/](https://ytshortmaker-frontend.onrender.com/)
 
@@ -169,6 +169,12 @@ Cheers! Now you have the project in your hands.
 **REMINDER:** The project is live, so if you prefer not to set it up and just want to make a request as soon as possible, use either Python or Curl request above to get quick results.
 
 Here's a link to a sample video: [Sample Video](https://drive.google.com/file/d/17q4ndOBx98M-pTpe9O0o-faneRxA9hkx/view?usp=drive_link) if you just wanna see the results.
+
+
+## Update: Added Audio Feature
+
+The generated videos now include background voice narration too.
+
 
 
 
