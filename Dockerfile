@@ -2,6 +2,7 @@ FROM python:3.11.9-slim AS builder
  
 WORKDIR /djangoApp
 COPY requirements.txt .
+RUN apt-get update && apt-get install -y espeak
 RUN python -m venv env92 &&  . env92/bin/activate &&  pip install --upgrade pip && pip install -r requirements.txt 
 COPY . .
 ENV PATH='/djangoApp/env92/bin:$PATH'
