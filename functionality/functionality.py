@@ -11,7 +11,7 @@ from django.conf import settings
 from icrawler.builtin import GoogleImageCrawler  # before using it --must install 1.lxml 2. bs4 3. requests  4. six 6. pillow
 #from icrawler.builtin import BingImageCrawler
 from django.conf import settings
-import pyttsx3 # generates audio
+from gtts import gTTS
 
 # for interacting with gemini
 import google.generativeai as genai
@@ -138,23 +138,13 @@ class videoFunctions:
 
 
         def generate_and_add_audio(display_text):
-            
-            engine = pyttsx3.init()
-
-            # setting female voice
-            voices = engine.getProperty('voices')   
-            engine.setProperty('voice', voices[1].id)  # 0 for male, 1 for female
-
-            # setting speech speed
-            engine.setProperty('rate',150)
-
             audio_file_paths = []
-            for index,text in enumerate(display_text):
-                print(text,'152 saving audio')
-                destination = os.path.join("audio_clips",f"{index}.mp3")
-                engine.save_to_file(text,destination)
+
+            for index, text in enumerate(display_text):
+                tts = gTTS(text=text, lang='en')  # Using English language as an example
+                destination = os.path.join("audio_clips", f"{index}.mp3")
+                tts.save(destination)
                 audio_file_paths.append(destination)
-            engine.runAndWait()  
 
             audio_clips = [AudioFileClip(file_path) for file_path in audio_file_paths]
             return audio_clips
