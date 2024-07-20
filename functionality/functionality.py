@@ -12,6 +12,7 @@ from icrawler.builtin import GoogleImageCrawler  # before using it --must instal
 #from icrawler.builtin import BingImageCrawler
 from django.conf import settings
 from gtts import gTTS
+import pollinations.ai as ai  # image ai
 
 # for interacting with gemini
 import google.generativeai as genai
@@ -89,48 +90,47 @@ class videoFunctions:
         return response.text
     
     def downloadImages(self,id,imgkeywords):
+        model = ai.Image()
+
         imgkeywords =toList(imgkeywords)
         print(imgkeywords,'92 downloadImages ---imgkeywords')
         media=settings.MEDIA_ROOT
         os.chdir(media)
         os.makedirs(f'video_{id}',exist_ok=True)
-        os.makedirs(f'video_{id}/images',exist_ok=True)   
+        os.makedirs(f'video_{id}/images',exist_ok=True)
+        os.chdir(f"video_{id}/images")
+        print(os.getcwd())
         for img_keyword in imgkeywords:
-            print(img_keyword,'for this img_keyword')
-            os.chdir(os.path.join(media,f'video_{id}','images'))
-            print('Starting Download...')
-            print('keyword to be download',img_keyword)
-            
-            google_crawler =GoogleImageCrawler( feeder_threads=1,parser_threads=3,downloader_threads=4,storage={'root_dir': img_keyword})
-            google_crawler.crawl(keyword=img_keyword, filters=dict(size='large'), max_num=4, file_idx_offset=0)
-
-
+            print('Downloading Image for',img_keyword)
+            image =model.generate(prompt=img_keyword)
+            image.save(f"{img_keyword}.png")
             print('Download Complete...')
-            os.chdir(media)
+        os.chdir(media)
         
     #_______________________________________________________________________________________________________________________
     def bestChoice(self,id,reverse,titlebar):
                                  
         media=settings.MEDIA_ROOT
-        os.chdir( os.path.join(media,f'video_{id}'))
+        os.chdir( os.path.join(media,f'video_{id}')) 
 
-        allimgfolders = os.listdir('images')
-        names =Keyword.objects.get(id=id)     # get keyword list from database
-        names = toList(names.pic_keywords)
-        print(names,'before arranging')
-        names= arrange(names,reverse,titlebar)
-        print(names,f'when reverse was {reverse}')
-        print("123--names",names)
-        print("124---all img folders",allimgfolders)
+        all_images = os.listdir('images')
+        print(all_images,'117')
+        # img keywords
+        img_keywords =Keyword.objects.get(id=id)     # get keyword list from database
+        img_keywords = toList(img_keywords.pic_keywords)
+        print(img_keywords,'before arranging')
+        img_keywords= arrange(img_keywords,reverse,titlebar)
+        print(img_keywords,f'when reverse was {reverse}')
+        print("124--img_keywords",img_keywords)
 
         imgpaths = []
-        for name in names:
-            for img in allimgfolders:
-                if name == img:
-                    new_path = os.path.join(media,f'video_{id}','images',img)
-                    all_new = os.listdir(new_path)
-                    random_pic = os.path.join(new_path, random.choice(all_new))
-                    imgpaths.append(random_pic)
+        for keyword in img_keywords:
+            for img in all_images:
+                print(img)
+                if  keyword== img.split(".")[0]: # removing image extension to find exact match bcz img is same name as the keyword
+                    img_path = os.path.join(media,f'video_{id}','images',img)
+                    imgpaths.append(img_path)
+        print(imgpaths)
         return imgpaths
     #_______________________________________________________________________________________________________________________
 
@@ -216,7 +216,7 @@ class videoFunctions:
         total =Keyword.objects.get(id=id).pic_keywords
         display_text = Keyword.objects.get(id=id).display_keywords
         display_text = toList(display_text)
-        VIDEO_TITLE = display_text[0]
+        VIDEO_TITLE = display_text[0]   #.replace(" ","_")
         display_text= arrange(display_text,reverse,titlebar)
         PER_IMAGE_DURATION = 2  # 2 SECONDS
         total= len(toList(total))
@@ -229,6 +229,8 @@ class videoFunctions:
                 remove_directory(os.path.join(os.getcwd(),'images'))  # remove images folder
                 remove_directory(os.path.join(os.getcwd(),'temp'))  # remove temp folder
                 print("Temporary Folders Removed!")
+                print(f"video_{id}",VIDEO_TITLE)
+
                 return f"video_{id}",VIDEO_TITLE
 
     def upload_to_drive(self,title,file_path,service_account_file,parent_folder_id):
