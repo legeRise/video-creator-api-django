@@ -1,15 +1,12 @@
 import os
 import shutil
 import time
-import random
 from PIL import Image
 from moviepy.editor import ImageClip, concatenate_videoclips,AudioFileClip
 from webcreatorApp.models import Keyword
 from webcreatorApp.models import Imgpath
 from .function_wrap_center import add_text_to_image
 from django.conf import settings
-from icrawler.builtin import GoogleImageCrawler  # before using it --must install 1.lxml 2. bs4 3. requests  4. six 6. pillow
-#from icrawler.builtin import BingImageCrawler
 from django.conf import settings
 from gtts import gTTS
 import pollinations.ai as ai  # image ai
