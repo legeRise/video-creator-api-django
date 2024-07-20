@@ -43,22 +43,17 @@ def dynamically_adjust_font(draw, text, font, max_width, max_height, padding):
     return font, lines
 
 
-def is_image_dark(image, dark_threshold=85, light_threshold=170):
+def is_image_dark(image,threshold=128):
     """Determine if the image is predominantly dark, light or in the middle and return a suitable color for overlay"""
     grayscale = image.convert('L')  # Convert to grayscale
     stat = ImageStat.Stat(grayscale)
     avg_brightness = stat.mean[0]
 
-    if avg_brightness < dark_threshold:
+    if avg_brightness < threshold:
         return ('dark','yellow')
-    elif avg_brightness > light_threshold:
-        return ('light','red')
     else:
-        if avg_brightness < 128:
-            return 'mid-dark', 'yellow' 
-        else:
-            return 'mid-light', 'red'  
-
+        return ('light','red')
+    
 
 def add_text_to_image(image_path, text, is_title=True, save_to=None):
     # Load the image
@@ -72,17 +67,6 @@ def add_text_to_image(image_path, text, is_title=True, save_to=None):
 
     # check if the image is more darker or more lighter
     image_brightness_level = is_image_dark(resized_image)
-
-    # dark or light : edit accordingly to have text appear more clearly
-    if image_brightness_level[0] == 'mid-dark':
-        enhancer = ImageEnhance.Contrast(resized_image);
-        resized_image = enhancer.enhance(0.75)
-    elif image_brightness_level[0] == 'mid-light':
-        enhancer = ImageEnhance.Contrast(resized_image);
-        resized_image = enhancer.enhance(1.2)
-        resized_image = resized_image.filter(ImageFilter.SMOOTH_MORE)
-    else:
-        resized_image = resized_image.filter(ImageFilter.DETAIL)
 
     # Create a drawing object
     draw = ImageDraw.Draw(resized_image)

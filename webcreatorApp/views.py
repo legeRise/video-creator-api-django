@@ -51,14 +51,16 @@ def create(request):
     #step 3: create video
     video_id,title= c.makeVideo(id=key.id,fk=key,reverse=key.reverse,titlebar=key.titlebar)
     video_dir = os.path.join(settings.BASE_DIR,settings.MEDIA_ROOT,video_id)
+    print(video_dir,'is the local 54----')
     local_video_path = os.path.join(video_dir,f'{title}.mp4')  # because the other part is just MEDIA_ROOT and that is changed automatically
-    
+    print(local_video_path,'is the local 55')
     # upload to gooogle drive for sharing
     generated_video_link = c.upload_to_drive(title,local_video_path,settings.SERVICE_ACCOUNT_FILE,settings.DRIVE_PARENT_FOLDER_ID)
-    print(os.getcwd(),'line 54------\n\\n\n\n')
+    print(os.getcwd(),'line 54------\n\n\n\n')
 
     # returning to main 'media' folder
     os.chdir("..")
+    print(os.getcwd(),"line no 62 views.py")
     # remove the temp video folder from media dir as video is uploaded to drive
     func.remove_directory(video_dir)
     
